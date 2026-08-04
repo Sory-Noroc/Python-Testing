@@ -1,7 +1,11 @@
-from pages.Page import Page
 from selenium.webdriver.common.by import By
+from core.BasePage import BasePage
 
-class LoginPage(Page):
-    USERNAME_FIELD_LOCATOR = (By.XPATH, '//*[@id="input-email"]')
-    PASSWORD_FIELD_LOCATOR = (By.XPATH, '//*[@id="input-password"]')
-    LOGIN_BUTTON_LOCATOR = (By.XPATH, '//*[@id="content"]//input[contains(@value, "Login")]')
+
+class LoginPage(BasePage):
+
+    locators = {
+        "username_field": (By.XPATH, '//*[@id="input-email"]'),
+        "password_field": (By.XPATH, '//*[@id="input-password"]'),
+        "login_button"  : (By.XPATH, '//*[@id="content"]//input[contains(@value, "Login")]'),
+    }
