@@ -1,18 +1,15 @@
-from behave.fixture import fixture, use_fixture_by_tag
 from selenium import webdriver
-from pages.Page import Page
-from time import sleep
+import os
+import logging
+from pages.PageFactory import PageFactory
 
-create_driver = lambda: webdriver.Chrome()
-username = "sorinnoroc1@gmail.com"
-password = "sorin.noroc"
+logging.basicConfig(filename="./reports/opencart.log", level=logging.INFO)
 
 def before_scenario(context, scenario):
     context.driver = webdriver.Chrome()
     context.driver.maximize_window()
-    context.page = Page(context.driver)
-    context.username = username
-    context.password = password
+    PageFactory.driver = context.driver
+    os.environ["BASE_URL"] = context.config.userdata.get("BASE_URL")
 
 def after_scenario(context, scenario):
     if hasattr(context, "driver"):

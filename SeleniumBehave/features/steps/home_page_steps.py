@@ -5,7 +5,7 @@ from pages.LoginPage import LoginPage
 
 
 @given("the user is on the home page '{url}'")
-def go_to_home_page(context, url):
+def go_to_page(context, url):
     context.driver.get(url)
     assert context.page.find_element_is_visible(HomePage.ACCOUNT_LOGO_LOCATOR, 1)
 
