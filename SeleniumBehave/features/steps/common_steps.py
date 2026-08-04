@@ -17,3 +17,8 @@ def button_click(context, clickable):
 def verify_page(context, page_name):
     context.current_page = PageFactory.get_object(page_name)
     assert context.current_page.confirm_page_is_opened()
+
+@then(u'user should see the error "{error}"')
+def error_check(context, error):
+    returned_error = context.current_page.get_error()
+    assert error in returned_error, f"'{error}' in '{returned_error}'"

@@ -9,14 +9,24 @@ Feature: Login to account
 
   Scenario: login with correct credentials works
     Given user accesses "Login" page
-    When user enters login details
+    When user enters username "sorinnoroc1@gmail.com" and password "sorin.noroc"
     And user clicks the "login_button"
     Then user is on "Account" page
 
-#  Scenario: failed login with invalid password
-#    Given the user is on the login page
-#    When user enters login details
-#    | field          | value                        |
-#    | username_field | standard_user                |
-#    | password_field | wrong_password               |
-#    Then user should not login successfully
+  @slow
+  Scenario Outline: failed login with invalid data
+    Testing wrong input field data, as well as injection attacks
+
+    Given user accesses "Login" page
+    When user enters username "<username>" and password "<password>"
+    And user clicks the "login_button"
+    Then user should see the error "Warning: No match for E-Mail Address and/or Password."
+
+    Examples:
+      | username              | password                  |
+      | nonexistent           | anypass                   |
+      | sorinnoroc1@gmail.com |                           |
+      |                       | sorin.noroc               |
+      | aaa                   | sorin.noroc               |
+      |                       |                           |
+      | sorinnoroc1@gmail.com | password' or 1=1;--       |
