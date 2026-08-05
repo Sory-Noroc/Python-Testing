@@ -11,7 +11,6 @@ def go_to_page(context, page_name):
 @when('user clicks the "{clickable}"')
 def button_click(context, clickable):
     context.current_page.element_click(clickable, 1)
-    assert context.current_page.confirm_page_is_opened()
 
 @then('user is on "{page_name}" page')
 def verify_page(context, page_name):

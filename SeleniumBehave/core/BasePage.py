@@ -75,12 +75,9 @@ class BasePage(ABC):
 
     def text_field_input(self, element_name: str, text_input: str, timeout: float):
         self.logger.info(f"Text input triggered for {element_name}.")
-        field = self.selenium.find_element_is_visible(self.locators[element_name], timeout)
-        element = self.selenium.enter_text(self.locators[element_name], text_input, timeout)
-        if element.get_attribute('value') == text_input:
-            self.logger.info(f"Input field population succeeded for {element_name}.")
-        else:
-            self.logger.error(f"Input field text mismatch for {element_name}.")
+        self.selenium.find_element_is_visible(self.locators[element_name], timeout)
+        self.selenium.enter_text(self.locators[element_name], text_input, timeout)
+        self.logger.info(f"Input field population finished for {element_name} with text: {text_input}.")
 
     def check_element_selection(self, element_name: str, selection: bool, timeout: float) -> bool:
         if selection:

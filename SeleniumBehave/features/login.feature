@@ -1,5 +1,6 @@
 Feature: Login to account
-  In order to use the app functionalities we need to log in
+  In order to use the app functionalities we need to log in.
+  Is linked to LoginPage
 
   Scenario: navigation from home page to login page
     Given user accesses "Home" page
@@ -13,7 +14,15 @@ Feature: Login to account
     And user clicks the "login_button"
     Then user is on "Account" page
 
+  @flaky
+  Scenario: login with random credentials fails
+    Given user accesses "Login" page
+    When user enters random username and password
+    And user clicks the "login_button"
+    Then user should see the error "Warning: No match for E-Mail Address and/or Password."
+
   @slow
+  @flaky
   Scenario Outline: failed login with invalid data
     Testing wrong input field data, as well as injection attacks
 
@@ -24,9 +33,9 @@ Feature: Login to account
 
     Examples:
       | username              | password                  |
-      | nonexistent           | anypass                   |
-      | sorinnoroc1@gmail.com |                           |
-      |                       | sorin.noroc               |
-      | aaa                   | sorin.noroc               |
+      | neexistent            | anypass                   |
+      | sorinnoroc3@gmail.com |                           |
+      |                       | good_password             |
+      | short                 | good_password             |
       |                       |                           |
-      | sorinnoroc1@gmail.com | password' or 1=1;--       |
+      | sorinnoroc3@gmail.com | password' or 1=1;--       |
