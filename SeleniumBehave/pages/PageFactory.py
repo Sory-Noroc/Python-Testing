@@ -1,5 +1,5 @@
 from core.BasePage import BasePage
-from pages import RegisterSuccessPage
+from pages.RegisterSuccessPage import RegisterSuccessPage
 from pages.AccountPage import AccountPage
 from pages.HomePage import HomePage
 from pages.LoginPage import LoginPage

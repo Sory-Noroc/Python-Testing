@@ -31,9 +31,9 @@ class SeleniumEngine:
         element = WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
         return partial_match in element.text
 
-    def find_element_attribute_text_matches(self, locator, attribute: str, text: str, timeout: float):
-        logger.info(f"Looking for element {locator} to have inside the attribute '{attribute}' the text '{text}'.")
-        return WebDriverWait(self.driver, timeout).until(EC.text_to_be_present_in_element_attribute(locator, attribute, text))
+    def find_element_attribute_text_matches(self, locator, attribute: str, expected_text: str, timeout: float):
+        logger.info(f"Looking for element {locator} to have inside the attribute '{attribute}' the text '{expected_text}'.")
+        return WebDriverWait(self.driver, timeout).until(EC.text_to_be_present_in_element_attribute(locator, attribute, expected_text))
 
     def find_element_and_is_clickable(self, locator, timeout: float):
         logger.info(f"Looking for element {locator} to be clickable for {timeout}sec.")
@@ -41,7 +41,8 @@ class SeleniumEngine:
 
     def check_element_is_selected(self, locator, timeout: float):
         logger.info(f"Looking for element {locator} to be selected for {timeout}sec.")
-        return WebDriverWait(self.driver, timeout).until(EC.element_to_be_selected(locator))
+        element = WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
+        WebDriverWait(self.driver, timeout).until(EC.element_to_be_selected(element))
 
     def find_element_is_located(self, locator, timeout: float):
         """

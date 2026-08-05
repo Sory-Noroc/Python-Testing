@@ -81,3 +81,14 @@ class BasePage(ABC):
             self.logger.info(f"Input field population succeeded for {element_name}.")
         else:
             self.logger.error(f"Input field text mismatch for {element_name}.")
+
+    def check_element_selection(self, element_name: str, selection: bool, timeout: float) -> bool:
+        if selection:
+            self.selenium.check_element_is_selected(self.locators[element_name], timeout)
+            return True
+        else:
+            try:
+                self.selenium.check_element_is_selected(self.locators[element_name], timeout)
+                return False
+            except TimeoutException:
+                return True

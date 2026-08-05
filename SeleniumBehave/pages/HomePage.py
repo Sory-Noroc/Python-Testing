@@ -9,6 +9,7 @@ class HomePage(BasePage):
         "page_title"  : (By.XPATH, '//*[@id="logo"]//a[text()="Your Store"]'),
         "account_logo": (By.XPATH, '//*[@id="top-links"]//span[text()="My Account"]'),
         "login_button": (By.XPATH, '//*[@id="top-links"]//a[text()="Login"]'),
+        "register_button": (By.XPATH, '//*[@id="top-links"]//a[text()="Register"]'),
         "logout_button": (By.XPATH, '//*[@id="top-links"]/a[text()="Logout"]')
     }
 
