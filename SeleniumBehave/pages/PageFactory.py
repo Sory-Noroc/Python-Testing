@@ -1,7 +1,10 @@
 from core.BasePage import BasePage
+from pages.RegisterSuccessPage import RegisterSuccessPage
 from pages.AccountPage import AccountPage
 from pages.HomePage import HomePage
 from pages.LoginPage import LoginPage
+from pages.RegisterPage import RegisterPage
+
 
 class PageFactory:
     """
@@ -13,7 +16,9 @@ class PageFactory:
     _registry = {
         "home": (HomePage, "?route=common/home"),
         "login": (LoginPage, "?route=account/login"),
-        "account": (AccountPage, "?route=account/account")
+        "account": (AccountPage, "?route=account/account"),
+        "register": (RegisterPage, "?route=account/register"),
+        "register_success": (RegisterSuccessPage, "?route=account/success")
     }
 
     @classmethod
