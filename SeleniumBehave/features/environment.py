@@ -1,6 +1,6 @@
 import subprocess
 import allure
-from selenium import webdriver
+from core.utils.seleniumUtils import create_driver
 import os
 import logging
 import pytest
@@ -19,7 +19,7 @@ def after_step(context, step):
         )
 
 def before_scenario(context, scenario):
-    context.driver = webdriver.Chrome()
+    context.driver = create_driver("edge")
     context.driver.maximize_window()
     PageFactory.driver = context.driver
     os.environ["BASE_URL"] = context.config.userdata.get("BASE_URL")
@@ -27,7 +27,6 @@ def before_scenario(context, scenario):
 def after_scenario(context, scenario):
     if hasattr(context, "driver"):
         context.driver.quit()
-
 
 def after_all(context):
     results_dir = "reports/allure-results"
