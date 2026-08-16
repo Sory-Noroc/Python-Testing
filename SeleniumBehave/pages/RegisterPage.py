@@ -1,3 +1,4 @@
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 
 from core.BasePage import BasePage
@@ -16,6 +17,7 @@ class RegisterPage(BasePage):
         "subscribe_no_field": (By.CSS_SELECTOR, "#content > form > fieldset:nth-child(3) > div > div > label:nth-child(2) > input[type=radio]"),
         "privacy_policy_field": (By.CSS_SELECTOR, "#content > form div > input[type=checkbox]"),
         "continue_button": (By.CSS_SELECTOR, "#content > form div > input[type=submit]"),
+        "error_field": (By.CSS_SELECTOR, "#account-register > div.alert.alert-danger.alert-dismissible > i")
     }
 
     def register_user(self,
@@ -46,4 +48,11 @@ class RegisterPage(BasePage):
 
     def check_input_text(self, locator_key: str, attribute: str, text: str, timeout: float) -> bool:
         self.selenium.find_element_attribute_text_matches(self.locators[locator_key], attribute, text, timeout)
+        return True
+
+    def check_element_is_invisible(self, locator: str, timeout: float) -> bool:
+        try:
+            self.selenium.find_element_is_not_visible(self.locators[locator], timeout)
+        except TimeoutException:
+            return False
         return True
