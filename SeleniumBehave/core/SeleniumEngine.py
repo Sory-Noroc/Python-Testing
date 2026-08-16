@@ -58,6 +58,10 @@ class SeleniumEngine:
         logger.info(f"Looking for element {locator} to be located for {timeout}sec.")
         return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
 
+    def find_text(self, locator, text: str, timeout: float):
+        logger.info(f"Looking for element {locator} to have the text: {text}.")
+        return WebDriverWait(self.driver, timeout).until(EC.text_to_be_present_in_element(locator, text))
+
     def enter_text(self, locator, text: str, timeout: float):
         """
         On the opened page of interest, finds the element,

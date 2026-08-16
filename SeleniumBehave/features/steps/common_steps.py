@@ -26,3 +26,7 @@ def error_check(context, error):
 def element_is_invisible(context, element):
     is_invisible = context.current_page.check_element_is_invisible(element, 2)
     assert is_invisible, f"'{element}' NOT invisible."
+
+@then(u'user should see the text "{text}"')
+def text_is_on_page(context, text):
+    context.current_page.find_text_on_page(text, 1)
