@@ -21,3 +21,8 @@ def verify_page(context, page_name):
 def error_check(context, error):
     returned_error = context.current_page.get_error()
     assert error in returned_error, f"'{error}' in '{returned_error}'"
+
+@then(u'element "{element}" should be invisible')
+def element_is_invisible(context, element):
+    is_invisible = context.current_page.check_element_is_invisible(element, 2)
+    assert is_invisible, f"'{element}' NOT invisible."

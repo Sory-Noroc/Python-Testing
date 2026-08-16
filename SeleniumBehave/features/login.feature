@@ -22,7 +22,7 @@ Feature: Login to account
     Then user should see the error "Warning: No match for E-Mail Address and/or Password."
 
   @slow
-  @flaky
+  @adjustable
   Scenario Outline: failed login with invalid data
     Testing wrong input field data, as well as injection attacks
 
