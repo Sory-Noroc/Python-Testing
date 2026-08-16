@@ -56,3 +56,8 @@ class RegisterPage(BasePage):
         except TimeoutException:
             return False
         return True
+
+    def get_error(self):
+        error_element = self.selenium.find_element_is_visible(self.locators["error_field"], 1)
+        self.logger.error(f"Attempt error: {error_element.text}")
+        return error_element.text

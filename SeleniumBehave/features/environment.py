@@ -1,7 +1,7 @@
 import subprocess
 import allure
 from core.utils.seleniumUtils import create_driver
-import os
+import os, shutil
 import logging
 import pytest
 from pages.PageFactory import PageFactory
@@ -27,6 +27,11 @@ def before_scenario(context, scenario):
 def after_scenario(context, scenario):
     if hasattr(context, "driver"):
         context.driver.quit()
+
+# def before_all(context):
+#     # Clean previous test results
+#     shutil.rmtree("reports/allure-results")
+#     os.mkdir("reports/allure-results")
 
 def after_all(context):
     results_dir = "reports/allure-results"

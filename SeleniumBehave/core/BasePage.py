@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import os
 
 from selenium.common import ElementNotVisibleException, TimeoutException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.ie.webdriver import WebDriver
 from core.SeleniumEngine import SeleniumEngine
 import logging
@@ -74,10 +75,14 @@ class BasePage(ABC):
         self.logger.info(f"Click performed for element: {element_name}.")
 
     def text_field_input(self, element_name: str, text_input: str, timeout: float):
-        self.logger.info(f"Text input triggered for {element_name}.")
+        self.logger.info(f"Text input triggered for: {element_name}.")
         self.selenium.find_element_is_visible(self.locators[element_name], timeout)
         self.selenium.enter_text(self.locators[element_name], text_input, timeout)
         self.logger.info(f"Input field population finished for {element_name} with text: {text_input}.")
+
+    def find_text_on_page(self, text: str, timeout: float):
+        self.logger.info(f"Find text on page triggered for text: {text}.")
+        self.selenium.find_text((By.XPATH, "/html/body"), text, timeout)
 
     def check_element_selection(self, element_name: str, selection: bool, timeout: float) -> bool:
         if selection:
