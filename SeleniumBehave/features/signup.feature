@@ -11,7 +11,7 @@ Feature: Register an account
     @adjustable
     Scenario: Registering an account is successful
       Given user accesses "Register" page
-      When user enters "Test", "User", "testuser4@gmail.com", "077254352", "strong_password123", "strong_password123", 1, 1
+      When user enters "Test", "User", "testuser5@gmail.com", "077254352", "strong_password123", "strong_password123", 1, 1
       And user clicks the "continue_button"
       Then element "error_field" should be invisible
       And user is on "Register_Success" page
