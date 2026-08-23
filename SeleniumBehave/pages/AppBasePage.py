@@ -12,6 +12,9 @@ class AppBasePage(BasePage, ABC):
         "search_button": (By.XPATH, '//*[@id="search"]/span/button')
     }
 
+    ADD_TO_CART_SELECTOR_TEMPLATE = (By.XPATH,
+                           "//div[contains(@class, 'product-thumb')][.//a[text()='{name}']]//button[contains(@onclick, 'cart.add')]")
+
     def __init__(self, driver, url_extension: str):
         """
         The pages have some common locators
@@ -24,3 +27,11 @@ class AppBasePage(BasePage, ABC):
         super().__init__(driver, url_extension)
         page_specific_locators = getattr(self, 'LOCATORS', {})
         self.LOCATORS = {**self.COMMON_LOCATORS, **page_specific_locators}
+
+
+    def add_product_to_cart_by_name(self, product_name: str, timeout: float):
+        by, xpath_template = self.ADD_TO_CART_SELECTOR_TEMPLATE
+        dynamic_selector = xpath_template.format(name=product_name)
+
+        button = self.selenium.find_element_and_is_clickable((by, dynamic_selector), timeout)
+        button.click()

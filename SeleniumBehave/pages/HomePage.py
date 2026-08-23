@@ -11,7 +11,9 @@ class HomePage(AppBasePage):
         "account_logo": (By.XPATH, '//*[@id="top-links"]//span[text()="My Account"]'),
         "login_button": (By.XPATH, '//*[@id="top-links"]//a[text()="Login"]'),
         "register_button": (By.XPATH, '//*[@id="top-links"]//a[text()="Register"]'),
-        "logout_button": (By.XPATH, '//*[@id="top-links"]/a[text()="Logout"]')
+        "logout_button": (By.XPATH, '//*[@id="top-links"]/a[text()="Logout"]'),
+        "first_add_to_cart_button": (By.XPATH, '//*[@id="content"]/div[2]/div//button[1]/span[text()="Add to Cart"]'),
+        "cart_cost": (By.XPATH, '//*[@id="cart-total"]')
     }
 
     def confirm_page_is_opened(self):
@@ -24,3 +26,6 @@ class HomePage(AppBasePage):
         input_field.send_keys(product_name)
         if with_enter:
             input_field.send_keys(Keys.ENTER)
+
+    def find_text_in_cart(self, text: str, timeout: float):
+        self.find_text(text, timeout, self.LOCATORS["cart_cost"])
