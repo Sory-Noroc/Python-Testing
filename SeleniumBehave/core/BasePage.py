@@ -80,9 +80,22 @@ class BasePage(ABC):
         self.selenium.enter_text(self.LOCATORS[element_name], text_input, timeout)
         self.logger.info(f"Input field population finished for {element_name} with text: {text_input}.")
 
-    def find_text_on_page(self, text: str, timeout: float):
-        self.logger.info(f"Find text on page triggered for text: {text}.")
-        self.selenium.find_text((By.XPATH, "/html/body"), text, timeout)
+    def find_text(self,
+                          text: str,
+                          timeout: float,
+                          domain: tuple = (By.XPATH, "/html/body")
+                          ):
+        """
+        Searches the specified domain from the DOM for mentioned text.
+        Default domain is /html/body, but a specific element(ex. button) can also be examined.
+
+        :param text: Text to be searched inside the WebElement
+        :param timeout: Timeout of the text not being found
+        :param domain: Selector/xpath of the domain to restrict the search, or
+        search the whole page by default.
+        """
+        self.logger.info(f"Find text on page triggered for text '{text}' in domain '{domain}'.")
+        self.selenium.find_text(domain, text, timeout)
 
     def check_element_selection(self, element_name: str, selection: bool, timeout: float) -> bool:
         if selection:

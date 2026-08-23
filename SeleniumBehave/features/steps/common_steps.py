@@ -29,4 +29,4 @@ def element_is_invisible(context, element):
 
 @then(u'user should see the text "{text}"')
 def text_is_on_page(context, text):
-    context.current_page.find_text_on_page(text, 1)
+    context.current_page.find_text(text, 1)
