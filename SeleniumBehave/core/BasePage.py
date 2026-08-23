@@ -40,7 +40,7 @@ class BasePage(ABC):
 
     @property
     @abstractmethod
-    def locators(self) -> dict:
+    def LOCATORS(self) -> dict:
         """ Abstract property of page locators """
         pass
 
@@ -52,7 +52,7 @@ class BasePage(ABC):
         return self.__class__.__name__
 
     def confirm_page_is_opened(self) -> bool:
-        for key, locator in self.locators.items():
+        for key, locator in self.LOCATORS.items():
             try:
                 self.selenium.find_element_is_visible(locator, 1)
                 self.logger.debug(f"Locator: {key} found and is visible.")
@@ -65,32 +65,45 @@ class BasePage(ABC):
     def element_click(self, element_name: str, timeout: float):
         self.logger.info(f"Element click triggered for {element_name}.")
 
-        if element_name not in self.locators.keys():
+        if element_name not in self.LOCATORS.keys():
             self.logger.error(f"Element name: {element_name} not found in locators.")
             raise ValueError(f"Element name: {element_name} not found in locators.")
 
-        element = self.selenium.find_element_and_is_clickable(self.locators[element_name], timeout)
+        element = self.selenium.find_element_and_is_clickable(self.LOCATORS[element_name], timeout)
         self.logger.info(f"Element to be clicked found: {element_name}.")
         element.click()
         self.logger.info(f"Click performed for element: {element_name}.")
 
     def text_field_input(self, element_name: str, text_input: str, timeout: float):
         self.logger.info(f"Text input triggered for: {element_name}.")
-        self.selenium.find_element_is_visible(self.locators[element_name], timeout)
-        self.selenium.enter_text(self.locators[element_name], text_input, timeout)
+        self.selenium.find_element_is_visible(self.LOCATORS[element_name], timeout)
+        self.selenium.enter_text(self.LOCATORS[element_name], text_input, timeout)
         self.logger.info(f"Input field population finished for {element_name} with text: {text_input}.")
 
-    def find_text_on_page(self, text: str, timeout: float):
-        self.logger.info(f"Find text on page triggered for text: {text}.")
-        self.selenium.find_text((By.XPATH, "/html/body"), text, timeout)
+    def find_text(self,
+                          text: str,
+                          timeout: float,
+                          domain: tuple = (By.XPATH, "/html/body")
+                          ):
+        """
+        Searches the specified domain from the DOM for mentioned text.
+        Default domain is /html/body, but a specific element(ex. button) can also be examined.
+
+        :param text: Text to be searched inside the WebElement
+        :param timeout: Timeout of the text not being found
+        :param domain: Selector/xpath of the domain to restrict the search, or
+        search the whole page by default.
+        """
+        self.logger.info(f"Find text on page triggered for text '{text}' in domain '{domain}'.")
+        self.selenium.find_text(domain, text, timeout)
 
     def check_element_selection(self, element_name: str, selection: bool, timeout: float) -> bool:
         if selection:
-            self.selenium.check_element_is_selected(self.locators[element_name], timeout)
+            self.selenium.check_element_is_selected(self.LOCATORS[element_name], timeout)
             return True
         else:
             try:
-                self.selenium.check_element_is_selected(self.locators[element_name], timeout)
+                self.selenium.check_element_is_selected(self.LOCATORS[element_name], timeout)
                 return False
             except TimeoutException:
                 return True

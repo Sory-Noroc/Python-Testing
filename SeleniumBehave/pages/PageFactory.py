@@ -1,4 +1,5 @@
 from core.BasePage import BasePage
+from pages.AppBasePage import AppBasePage
 from pages.RegisterSuccessPage import RegisterSuccessPage
 from pages.AccountPage import AccountPage
 from pages.HomePage import HomePage
@@ -22,7 +23,7 @@ class PageFactory:
     }
 
     @classmethod
-    def get_object(cls, page_type: str) -> BasePage:
+    def get_object(cls, page_type: str) -> AppBasePage:
         page_class, url_extension = cls._registry.get(page_type.lower())
         if not page_class:
             raise ValueError(f"Page {page_type} not implemented.")
