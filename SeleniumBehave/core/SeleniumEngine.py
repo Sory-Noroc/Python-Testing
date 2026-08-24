@@ -1,4 +1,6 @@
 import logging
+
+from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -80,3 +82,10 @@ class SeleniumEngine:
         element.send_keys(text)
         logger.info(f"Entered the text '{text}' into the element '{locator}'.")
         return element
+
+    def scroll_to_element(self, locator, timeout: float, with_click: bool = False):
+        logger.info(f"Scrolling to element {locator}.")
+        element: WebElement = self.find_element_is_located(locator, timeout=timeout)
+        ActionChains(self.driver).scroll_to_element(element).perform()
+        if with_click:
+            element.click()
