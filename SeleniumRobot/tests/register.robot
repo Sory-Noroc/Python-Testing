@@ -1,38 +1,67 @@
 *** Settings ***
-Library         DateTime
 Resource        ../resources/pages/register_page.resource
+Test Setup     Setup Register Page
+Test Teardown  Close Browser
 
 *** Test Cases ***
 Successful Registration with Usual Data
-    Test Registration Flow For Specific Data    Mihai    Viteazul    079135586   mihai0299!    mihai0299!    1
+    ${TIMESTAMP}=        Get Current Date    result_format=%Y%m%d%H%M%S
+    ${UNIQUE_EMAIL}=     Set Variable        user_${TIMESTAMP}@example.com
+
+    Populate Registration Fields    Mihai    Viteazul    ${UNIQUE_EMAIL}    079135586   mihai0299!    mihai0299!    1
+    Select Checkbox        ${PRIVACY_LOCATOR}
+    Click Button           ${REGISTER_BUTTON}
+    Validate Account Has Been Created
+
 
 Successful Registration with Maximum Length of Field Data
-    Test Registration Flow For Specific Data    MyVeryLongFirstNameWithManyWords    MyVeryLongLastNameWithManyWordss    01234567890123456789012345678932    MyVeryLongPassword20    MyVeryLongPassword20    1
+    ${TIMESTAMP}=        Get Current Date    result_format=%Y%m%d%H%M%S
+    ${UNIQUE_EMAIL}=     Set Variable        user_${TIMESTAMP}@example.com
+
+    Populate Registration Fields    MyVeryLongFirstNameWithManyWords    MyVeryLongLastNameWithManyWordss    ${UNIQUE_EMAIL}    01234567890123456789012345678932    MyVeryLongPassword20    MyVeryLongPassword20    1
+    Select Checkbox        ${PRIVACY_LOCATOR}
+    Click Button           ${REGISTER_BUTTON}
+    Validate Account Has Been Created
+
 
 Successful Registration with Minimum Length of Field Data
-    Test Registration Flow For Specific Data    f    l    111    pass    pass    1
+    ${TIMESTAMP}=        Get Current Date    result_format=%Y%m%d%H%M%S
+    ${UNIQUE_EMAIL}=     Set Variable        user_${TIMESTAMP}@example.com
 
-Failed registration due to policy not accepted
-    Initialize Browser And Wait For Page To Be Loaded
+    Populate Registration Fields    f    l    ${UNIQUE_EMAIL}    111    pass    pass    1
+    Select Checkbox        ${PRIVACY_LOCATOR}
+    Click Button           ${REGISTER_BUTTON}
+    Validate Account Has Been Created
+
+
+Failed Registration due to Fields too Big
+    Populate Registration Fields    MyVeryLongFirstNameWithManyWords0    MyVeryLongLastNameWithManyWordss0    testgmail@gmail.com    012345678901234567890123456789320    MyVeryLongPassword200    MyVeryLongPassword200    1
+    Click Button               ${REGISTER_BUTTON}
+
+    Scroll Element Into View   ${REGISTER_BUTTON}
+    Page Should Contain        First Name must be between 1 and 32 characters!
+    Page Should Contain        Last Name must be between 1 and 32 characters!
+    Page Should Contain        Telephone must be between 3 and 32 characters!
+    Page Should Contain        Password must be between 4 and 20 characters!
+
+
+Failed Registration due to Policy not Accepted
     Populate Registration Fields    Cristiano    Ronaldo    testemail@gmail.com    0730781178    goodpass    goodpass    1
     Click Button              ${REGISTER_BUTTON}
 
     Wait Until Element Is Visible    ${STATUS_FIELD}
     Element Text Should Be           ${STATUS_FIELD}     Warning: You must agree to the Privacy Policy!
 
-    [Teardown]    Close Browser
 
-Failed Registration due to wrong password confirmation
-    Initialize Browser And Wait For Page To Be Loaded
+Failed Registration due to Wrong Password Confirmation
     Populate Registration Fields    Cristiano    Ronaldo    testemail@gmail.com    0730781178    goodpass    differentpass    1
     Select Checkbox            ${PRIVACY_LOCATOR}
     Click Button               ${REGISTER_BUTTON}
 
     Page Should Contain    Password confirmation does not match password!
-    [Teardown]    Close Browser
-    
+
+
 Failed registration when no fields are populated
-    Initialize Browser And Wait For Page To Be Loaded
     Click Button               ${REGISTER_BUTTON}
 
     Wait Until Element Is Visible    ${STATUS_FIELD}
