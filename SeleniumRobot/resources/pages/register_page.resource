@@ -23,19 +23,30 @@ ${REGISTER_BUTTON}               css=#content > form div > input[type=submit]
 ${STATUS_FIELD}                  css=#account-register > div.alert.alert-danger.alert-dismissible
 
 *** Keywords ***
-Populate Registration Fields
-    [Arguments]     ${FIRST_NAME}    ${LAST_NAME}    ${EMAIL}    ${PHONE_NUM}    ${PASSWORD}    ${PASSWORD_CONFIRMATION}    ${IS_SUBSCRIBING}
+Create Email using Timestamp
+    ${timestamp}=        Get Current Date    result_format=%Y%m%d%H%M%S
+    ${unique_email}=     Set Variable        user_${timestamp}@example.com
+    RETURN    ${unique_email}
 
-    Input Text             ${FIRST_NAME_LOCATOR}           ${FIRST_NAME}
-    Input Text             ${LAST_NAME_LOCATOR}            ${LAST_NAME}
-    Input Text             ${EMAIL_LOCATOR}                ${EMAIL}
-    Input Text             ${PHONE_NUMBER_LOCATOR}         ${PHONE_NUM}
-    Input Password         ${PASSWORD_LOCATOR}             ${PASSWORD}
-    Input Password         ${CONFIRM_PASSWORD_LOCATOR}     ${PASSWORD_CONFIRMATION}
-    Select Radio Button    ${SUBSCRIPTION_NAME}            ${IS_SUBSCRIBING}
+Populate Registration Fields
+    [Arguments]     ${first_name}    ${last_name}    ${email}    ${phone_num}    ${password}    ${password_confirmation}    ${is_subscribing}
+
+    Input Text             ${FIRST_NAME_LOCATOR}           ${first_name}
+    Input Text             ${LAST_NAME_LOCATOR}            ${last_name}
+    Input Text             ${EMAIL_LOCATOR}                ${email}
+    Input Text             ${PHONE_NUMBER_LOCATOR}         ${phone_num}
+    Input Password         ${PASSWORD_LOCATOR}             ${password}
+    Input Password         ${CONFIRM_PASSWORD_LOCATOR}     ${password_confirmation}
+    Select Radio Button    ${SUBSCRIPTION_NAME}            ${is_subscribing}
 
 Validating Account has Been Created
     Element Should Not Be Visible   ${STATUS_FIELD}  # The error field
     Title Should Be                 Your Account Has Been Created!
     Current Frame Should Contain    Your Account Has Been Created!
     Current Frame Should Contain    Congratulations! Your new account has been successfully created!
+
+Page Should Contain No Field Errors
+    Page Should Not Contain Element        ${FIRST_NAME_ERROR_LOCATOR}
+    Page Should Not Contain Element        ${LAST_NAME_ERROR_LOCATOR}
+    Page Should Not Contain Element        ${PHONE_ERROR_LOCATOR}
+    Page Should Not Contain Element        ${PASSWORD_ERROR_LOCATOR}
