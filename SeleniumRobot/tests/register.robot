@@ -5,6 +5,7 @@ Test Teardown  Close Browser
 
 *** Test Cases ***
 Successful Registration with Usual Data
+    [Tags]    register     smoke     critical
     ${unique_email}=     Create Email using Timestamp
 
     Populate Registration Fields    first_name=Mihai
@@ -21,6 +22,7 @@ Successful Registration with Usual Data
 
 
 Successful Registration with Maximum Length of Field Data
+    [Tags]    register
     ${unique_email}=     Create Email Using Timestamp
 
     Populate Registration Fields    
@@ -38,6 +40,7 @@ Successful Registration with Maximum Length of Field Data
 
 
 Successful Registration with Minimum Length of Field Data
+    [Tags]    register
     ${unique_email}=     Create Email Using Timestamp
 
     Populate Registration Fields
@@ -57,7 +60,7 @@ Successful Registration with Minimum Length of Field Data
 
 Failed Registration due to Fields too Big
     [Documentation]    
-    [Tags]    
+    [Tags]    register    bug
     Populate Registration Fields
     ...    first_name=MyVeryLongFirstNameWithManyWords0
     ...    last_name=MyVeryLongLastNameWithManyWordss0
@@ -78,6 +81,7 @@ Failed Registration due to Fields too Big
 
 
 Failed Registration with Password too Big
+    [Tags]    register    bug
     Populate Registration Fields
     ...    first_name=MyFirstName
     ...    last_name=MyLastName
@@ -95,6 +99,7 @@ Failed Registration with Password too Big
 
 
 Failed Registration due to Policy not Accepted
+    [Tags]    register
     Populate Registration Fields
     ...    first_name=MyFirstName
     ...    last_name=MyLastName
@@ -111,6 +116,7 @@ Failed Registration due to Policy not Accepted
 
 
 Failed Registration due to Wrong Password Confirmation
+    [Tags]    register
     Populate Registration Fields
     ...    first_name=MyFirstName
     ...    last_name=MyLastName
@@ -127,6 +133,7 @@ Failed Registration due to Wrong Password Confirmation
 
 
 Failed Registration when no Fields are Populated
+    [Tags]    register
     Click Button                     ${REGISTER_BUTTON}
 
     Wait Until Element Is Visible    ${STATUS_FIELD}
