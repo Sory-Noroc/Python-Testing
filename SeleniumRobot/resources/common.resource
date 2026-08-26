@@ -5,7 +5,7 @@ ${BROWSER}     chrome
 Library    SeleniumLibrary
 
 *** Keywords ***
-Initialize and maximize browser session
+Setup Browser
     [Arguments]    ${URL}
 
     Open Browser           ${URL}    ${BROWSER}

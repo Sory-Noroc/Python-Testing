@@ -6,23 +6,23 @@ Resource       ../common.resource
 *** Variables ***
 ${URL}         https://demo.opencartmart.com/ordercoupon/index.php?route=account/register
 
-${FIRST_NAME_LOCATOR}        id=input-firstname
-${LAST_NAME_LOCATOR}         id=input-lastname
-${EMAIL_LOCATOR}             id=input-email
-${PHONE_NUMBER_LOCATOR}      id=input-telephone
-${PASSWORD_LOCATOR}          id=input-password
-${CONFIRM_PASSWORD_LOCATOR}  id=input-confirm
-${SUBSCRIPTION_NAME}         newsletter
-${PRIVACY_LOCATOR}           css=#content > form div > input[type=checkbox]
-${REGISTER_BUTTON}           css=#content > form div > input[type=submit]
-${STATUS_FIELD}              css=#account-register > div.alert.alert-danger.alert-dismissible
+${FIRST_NAME_LOCATOR}            id=input-firstname
+${FIRST_NAME_ERROR_LOCATOR}      css=#account > div:nth-child(3) div.text-danger
+${LAST_NAME_LOCATOR}             id=input-lastname
+${LAST_NAME_ERROR_LOCATOR}       css=#account > div:nth-child(4) div.text-danger
+${EMAIL_LOCATOR}                 id=input-email
+${PHONE_NUMBER_LOCATOR}          id=input-telephone
+${PHONE_ERROR_LOCATOR}           css=#account > div:nth-child(6) > div > div
+${PASSWORD_LOCATOR}              id=input-password
+${PASSWORD_ERROR_LOCATOR}        css=#content > form > fieldset:nth-child(2) > div.form-group.required.has-error div.text-danger
+${CONFIRM_PASSWORD_LOCATOR}      id=input-confirm
+${CONFIRM_PASS_ERROR_LOCATOR}    css=#content > form > fieldset:nth-child(2) > div.form-group.required.has-error div.text-danger
+${SUBSCRIPTION_NAME}             newsletter
+${PRIVACY_LOCATOR}               css=#content > form div > input[type=checkbox]
+${REGISTER_BUTTON}               css=#content > form div > input[type=submit]
+${STATUS_FIELD}                  css=#account-register > div.alert.alert-danger.alert-dismissible
 
 *** Keywords ***
-Setup Register Page
-    Initialize And Maximize Browser Session    ${URL}
-    Title Should Be                            Register Account
-    Wait Until Element Is Visible              ${FIRST_NAME_LOCATOR}     timeout=2s
-
 Populate Registration Fields
     [Arguments]     ${FIRST_NAME}    ${LAST_NAME}    ${EMAIL}    ${PHONE_NUM}    ${PASSWORD}    ${PASSWORD_CONFIRMATION}    ${IS_SUBSCRIBING}
 
@@ -34,7 +34,7 @@ Populate Registration Fields
     Input Password         ${CONFIRM_PASSWORD_LOCATOR}     ${PASSWORD_CONFIRMATION}
     Select Radio Button    ${SUBSCRIPTION_NAME}            ${IS_SUBSCRIBING}
 
-Validate Account has Been Created
+Validating Account has Been Created
     Element Should Not Be Visible   ${STATUS_FIELD}  # The error field
     Title Should Be                 Your Account Has Been Created!
     Current Frame Should Contain    Your Account Has Been Created!
