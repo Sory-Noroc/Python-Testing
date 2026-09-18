@@ -1,8 +1,8 @@
-*** Variables ***
-${BROWSER}     chrome
-
 *** Settings ***
 Library    SeleniumLibrary
+
+*** Variables ***
+${BROWSER}     chrome
 
 *** Keywords ***
 Setup Browser
