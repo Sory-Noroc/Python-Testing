@@ -6,28 +6,29 @@ Test Teardown  Close Browser
 
 *** Test Cases ***
 Successful Login with Default Account
+    [Tags]    login
+    Submit Login Form
+    Verify Successful Login
+    
+    
+Successful Login with Valid Credentials
     [Tags]    login    smoke
-    Click Button                       ${LOGIN_BUTTON_LOCATOR}
-    Page Should Not Contain Element    ${LOGIN_ERROR}
-    I Should Be Logged In
+    Populate Login Fields    demo@opencartmart.com    123456
+    Submit Login Form
+    Verify Successful Login
+
+Invalid Login Scenarios
+    [Tags]    login    negative
+    [Template]    Verify Invalid Login
+    # Email                      Password
+    demo@opencartmart.com        wrong_pass123
+    invalid_email@domain.com     random_pass123
+    admin                        password' or 1=1;--
 
 
-Failing Login with Correct Email but Wrong Password
-    [Tags]    login
-    Populate Login Fields        demo@opencartmart.com        wrong_password123
-    Click Button                 ${LOGIN_BUTTON_LOCATOR}
-    Login Fails with Generic Error
-
-
-Failing Login with Incorrect Credentials
-    [Tags]    login
-    Populate Login Fields        randomemail@gmail.com        random_pass123
-    Click Button                 ${LOGIN_BUTTON_LOCATOR}
-    Login Fails with Generic Error
-
-
-Failing Login for Admin Account Injection Attempt
-    [Tags]    login
-    Populate Login Fields        admin    password' or 1=1;--
-    Click Button                 ${LOGIN_BUTTON_LOCATOR}
-    Login Fails with Generic Error
+*** Keywords ***
+Verify Invalid Login
+    [Arguments]    ${email}    ${password}
+    Populate Login Fields    ${email}    ${password}
+    Submit Login Form
+    Verify Login Failure
