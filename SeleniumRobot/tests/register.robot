@@ -3,6 +3,7 @@ Resource        ../resources/pages/register_page.resource
 Test Setup     Setup Browser    ${URL}
 Test Teardown  Close Browser
 
+
 *** Test Cases ***
 Successful Registration with Usual Data
     [Tags]    register     smoke     critical
@@ -15,9 +16,10 @@ Successful Registration with Usual Data
     ...    password=mihai0299!
     ...    password_confirmation=mihai0299!
     ...    is_subscribing=1
-    Select Checkbox               ${PRIVACY_LOCATOR}
-    Click Button                  ${REGISTER_BUTTON}
-    Page Should Contain No Field Errors
+    Accept Privacy Policy
+    Submit Registration Form
+
+    Validating Page Contains No Field Errors
     Validating Account Has Been Created
 
 
@@ -25,7 +27,7 @@ Successful Registration with Maximum Length of Field Data
     [Tags]    register
     ${unique_email}=     Create Email Using Timestamp
 
-    Populate Registration Fields    
+    Populate Registration Fields
     ...    first_name=MyVeryLongFirstNameWithManyWords
     ...    last_name=MyVeryLongLastNameWithManyWordss
     ...    email=${unique_email}
@@ -33,9 +35,10 @@ Successful Registration with Maximum Length of Field Data
     ...    password=MyVeryLongPassword20
     ...    password_confirmation=MyVeryLongPassword20
     ...    is_subscribing=1
-    Select Checkbox                   ${PRIVACY_LOCATOR}
-    Click Button                      ${REGISTER_BUTTON}
-    Page Should Contain No Field Errors
+    Accept Privacy Policy
+    Submit Registration Form
+
+    Validating Page Contains No Field Errors
     Validating Account Has Been Created
 
 
@@ -52,15 +55,16 @@ Successful Registration with Minimum Length of Field Data
     ...    password_confirmation=pass
     ...    is_subscribing=1
 
-    Select Checkbox        ${PRIVACY_LOCATOR}
-    Click Button           ${REGISTER_BUTTON}
-    Page Should Contain No Field Errors
+    Accept Privacy Policy
+    Submit Registration Form
+
+    Validating Page Contains No Field Errors
     Validating Account Has Been Created
 
 
 Failed Registration due to Fields too Big
-    [Documentation]    
-    [Tags]    register    bug
+    [Documentation]
+    [Tags]    register    negative    bug
     Populate Registration Fields
     ...    first_name=MyVeryLongFirstNameWithManyWords0
     ...    last_name=MyVeryLongLastNameWithManyWordss0
@@ -70,18 +74,14 @@ Failed Registration due to Fields too Big
     ...    password_confirmation=MyVeryLongPassword200
     ...    is_subscribing=1
 
-    Select Checkbox                   ${PRIVACY_LOCATOR}
-    Click Button                      ${REGISTER_BUTTON}
+    Accept Privacy Policy
+    Submit Registration Form
 
-    Scroll Element Into View          ${REGISTER_BUTTON}
-    Element Should Contain        ${FIRST_NAME_ERROR_LOCATOR}    First Name must be between 1 and 32 characters!
-    Element Should Contain        ${LAST_NAME_ERROR_LOCATOR}     Last Name must be between 1 and 32 characters!
-    Element Should Contain        ${PHONE_ERROR_LOCATOR}         Telephone must be between 3 and 32 characters!
-    Element Should Contain        ${PASSWORD_ERROR_LOCATOR}      Password must be between 4 and 20 characters!
+    Validating Page Contains All Field Errors
 
 
 Failed Registration with Password too Big
-    [Tags]    register    bug
+    [Tags]    register    negative    bug
     Populate Registration Fields
     ...    first_name=MyFirstName
     ...    last_name=MyLastName
@@ -91,15 +91,14 @@ Failed Registration with Password too Big
     ...    password_confirmation=MyVeryLongPassword200
     ...    is_subscribing=1
 
-    Select Checkbox                   ${PRIVACY_LOCATOR}
-    Click Button                      ${REGISTER_BUTTON}
+    Accept Privacy Policy
+    Submit Registration Form
 
-    Element Should Contain            ${PASSWORD_ERROR_LOCATOR}      Password must be between 4 and 20 characters!
-    Title Should Be                   Register Account
+    Validating Page Shows Password Error
 
 
 Failed Registration due to Policy not Accepted
-    [Tags]    register
+    [Tags]    register    negative
     Populate Registration Fields
     ...    first_name=MyFirstName
     ...    last_name=MyLastName
@@ -109,14 +108,13 @@ Failed Registration due to Policy not Accepted
     ...    password_confirmation=MyVeryLongPassword
     ...    is_subscribing=1
 
-    Click Button                     ${REGISTER_BUTTON}
+    Submit Registration Form
 
-    Wait Until Element Is Visible    ${STATUS_FIELD}
-    Element Text Should Be           ${STATUS_FIELD}     Warning: You must agree to the Privacy Policy!
+    Validating Page Shows Policy Error
 
 
 Failed Registration due to Wrong Password Confirmation
-    [Tags]    register
+    [Tags]    register    negative
     Populate Registration Fields
     ...    first_name=MyFirstName
     ...    last_name=MyLastName
@@ -126,20 +124,15 @@ Failed Registration due to Wrong Password Confirmation
     ...    password_confirmation=DifferentPassword
     ...    is_subscribing=1
 
-    Select Checkbox           ${PRIVACY_LOCATOR}
-    Click Button              ${REGISTER_BUTTON}
+    Accept Privacy Policy
+    Submit Registration Form
 
-    Element Should Contain    ${CONFIRM_PASS_ERROR_LOCATOR}    Password confirmation does not match password!
+    Validating Page Shows Password Confirmation Error
 
 
 Failed Registration when no Fields are Populated
-    [Tags]    register
-    Click Button                     ${REGISTER_BUTTON}
+    [Tags]    register    negative
+    Submit Registration Form
 
-    Wait Until Element Is Visible    ${STATUS_FIELD}
-    Element Text Should Be           ${STATUS_FIELD}     Warning: You must agree to the Privacy Policy!
-
-    Element Should Contain        ${FIRST_NAME_ERROR_LOCATOR}    First Name must be between 1 and 32 characters!
-    Element Should Contain        ${LAST_NAME_ERROR_LOCATOR}     Last Name must be between 1 and 32 characters!
-    Element Should Contain        ${PHONE_ERROR_LOCATOR}         Telephone must be between 3 and 32 characters!
-    Element Should Contain        ${PASSWORD_ERROR_LOCATOR}      Password must be between 4 and 20 characters!
+    Validating Page Shows Policy Error
+    Validating Page Contains All Field Errors
