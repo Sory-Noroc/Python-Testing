@@ -1,0 +1,5 @@
+BASE_URL: http://localhost:3000
+BROWSER: chrome
+ENDPOINTS:
+  home: /ro
+  transport: /ro/transport
