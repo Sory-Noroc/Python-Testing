@@ -1,4 +1,5 @@
 *** Settings ***
+Library    String
 Library    SeleniumLibrary
 
 
@@ -14,3 +15,8 @@ Clear Input Field
     [Arguments]    ${locator}
     Wait Until Element Is Visible    ${locator}
     Press Keys                       ${locator}     CTRL+a+BACKSPACE
+
+Get Formatted Locator
+    [Arguments]    ${formattable_locator}    ${placeholder}
+    ${formatted_locator}=    Format String           ${formattable_locator}    placeholder=${placeholder}
+    RETURN    ${formatted_locator}

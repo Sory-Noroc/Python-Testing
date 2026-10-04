@@ -7,37 +7,75 @@ Resource          ../common/keywords.resource
 *** Variables ***
 ${URL}            ${BASE_URL}${ENDPOINTS.home}
 
-${INPUT_FIELD}                 xpath=//input[@inputmode='numeric'][following-sibling::span[text()='{currency}']]
+${DROPDOWN_BUTTON}             xpath=//div[@data-onboarding='home-calculator']/button[//span[contains(text(), 'valuta')]]
+${INPUT_FIELD}                 xpath=//input[@inputmode='numeric'][following-sibling::span[text()='{placeholder}']]
 ${ALL_VISIBLE_INPUT_FIELDS}    xpath=//div[@data-onboarding='home-calculator']//div[contains(@class, 'row')]//input[@inputmode='numeric']
+${BANK_DROPDOWN_BUTTON}        xpath=//div[@data-onboarding='home-calculator']//button[contains(@class, 'bank')]
+${ALL_VISIBLE_BANKS}           xpath=//div[@data-onboarding='home-calculator']//div[preceding-sibling::button[contains(@class, 'bank')]]//button
+${BANK_CHOICE_BUTTON}          xpath=//div[@data-onboarding='home-calculator']//div[preceding-sibling::button[contains(@class, 'bank')]]//button[text()='{placeholder}']
 
 *** Keywords ***
-Get Currency Input Field Locator
-    [Arguments]    ${formattable_locator}    ${currency}
-    ${formatted_locator}=    Format String           ${formattable_locator}    currency=${currency}
-    RETURN    ${formatted_locator}
 
-Select and Clear Input Field
+### CURRENCY
+The User Pressed the Currency Dropdown Arrow
+    [Arguments]    ${timeout}=1s
+    Wait Until Keyword Succeeds    5x    ${timeout}    Click With Scroll And Wait    ${DROPDOWN_BUTTON}
+    Element Should Be Visible            ${BANK_DROPDOWN_BUTTON}
+    ${currencies_count}=    Get Element Count    ${ALL_VISIBLE_INPUT_FIELDS}
+    ${expected_count}=      Get Length    ${EXTENDED_CURRENCIES}
+    Should Be Equal         ${currencies_count}    ${expected_count}
+    ...    msg=Expected to see ${expected_count} currencies, but saw ${currencies_count}.
+
+The User Clears the Input Field for
     [Arguments]            ${currency}
-    ${locator}=    Get Currency Input Field Locator    ${INPUT_FIELD}    currency=${currency}
-    Clear Input Field                ${locator}
-    Verify Field Text Is             ${currency}    0
+    ${locator}=    Get Formatted Locator         ${INPUT_FIELD}    placeholder=${currency}
+    Clear Input Field                            ${locator}
+    Verify Field Text Is                         ${currency}    0
 
-Type Into Input Field
+The User Enters Into Input Field
     [Arguments]            ${currency}           ${value}
-    ${locator}=    Get Currency Input Field Locator    ${INPUT_FIELD}    currency=${currency}
+    ${locator}=    Get Formatted Locator         ${INPUT_FIELD}    placeholder=${currency}
     Wait Until Element Is Visible                ${locator}
     Input Text             ${locator}            ${value}
-    Verify Field Text Is   ${currency}           ${value}
 
+The User Enters Invalid Data Into Field
+    [Arguments]    ${currency}    ${data}    ${expected}
+    The User Clears The Input Field For          ${currency}
+    The User Enters Into Input Field             ${currency}    ${data}    ${expected}
+    Verify Field Text Is                         ${currency}    ${expected}
+
+### BANK
+The User Pressed The Bank Dropdown Arrow
+    [Arguments]    ${timeout}=1s
+    Wait Until Keyword Succeeds    5x    ${timeout}    Click With Scroll And Wait    ${BANK_DROPDOWN_BUTTON}
+    Element Should Be Visible                      ${BANK_DROPDOWN_BUTTON}
+    ${currencies_count}=      Get Element Count    ${ALL_VISIBLE_BANKS}
+    ${expected_count}=        Get Length           ${BANKS}
+    Should Be Equal           ${currencies_count}       ${expected_count}
+    ...    msg=Expected to see ${expected_count} banks, but saw ${currencies_count}.
+
+The User Picked Bank
+    [Arguments]    ${bank}
+    ${locator}=    Get Formatted Locator    ${BANK_CHOICE_BUTTON}    ${bank}
+    Click With Scroll And Wait              ${locator}
+    Element Should Not Be Visible           ${locator}
+    
+The Expected Banks are Visible
+    FOR    ${expected_bank}    IN    @{BANKS}
+        ${bank_locator}=    Get Formatted Locator    ${BANK_CHOICE_BUTTON}    ${expected_bank}
+        Wait Until Keyword Succeeds    5x    200ms    Element Should Be Visible    ${bank_locator}
+    END
+
+### VERIFICATION
 Verify Field Text Is
-    [Arguments]            ${currency}           ${text}
-    ${locator}=    Get Currency Input Field Locator    ${INPUT_FIELD}    ${currency}
-    Wait Until Element Is Visible    ${locator}
-    ${output}=    Get Value          ${locator}
-    Should Be Equal    ${output}     ${text}
-    ...    msg=Input field value is '${output}', but was expected '${text}'.
+    [Arguments]            ${currency}           ${expected}
+    ${locator}=    Get Formatted Locator         ${INPUT_FIELD}    ${currency}
+    Wait Until Keyword Succeeds    5x    200ms    Element Attribute Value Should Be    ${locator}    value    ${expected}
+    ${output}=     Get Value         ${locator}
+    Should Be Equal                  ${output}     ${expected}
+    ...    msg=Input field value is '${output}', but was expected '${expected}'.
 
-Verify All Currency Fields Show Zero
+All Currency Fields Show Zero
     ${currency_fields}=    Get WebElements       ${ALL_VISIBLE_INPUT_FIELDS}
     FOR    ${locator}    IN    ${currency_fields}
         Wait Until Element Is Visible    ${locator}
@@ -47,7 +85,7 @@ Verify All Currency Fields Show Zero
         ...    msg=Input field value is '${output}', but was expected '0'.
     END
 
-Verify All Currency Fields Are Different than Zero
+All Currency Fields Are Different than Zero
     ${currency_fields}=    Get WebElements       ${ALL_VISIBLE_INPUT_FIELDS}
     FOR    ${locator}    IN    ${currency_fields}
         Wait Until Element Is Visible    ${locator}

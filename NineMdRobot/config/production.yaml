@@ -4,3 +4,21 @@ BROWSER: chrome
 ENDPOINTS:
   home: /ro
   transport: /ro/transport
+# Order doesn't matter for currencies
+DEFAULT_CURRENCIES:
+  - mdl
+  - usd
+  - eur
+EXTENDED_CURRENCIES:
+  - mdl
+  - usd
+  - eur
+  - ron
+  - uah
+  - gbp
+BANKS:
+  - Banca Nationala a Moldovei
+  - Energbank
+  - Eurocreditbank
+  - Fincombank
+  - Mobiasbanca
