@@ -1,0 +1,7 @@
+BASE_URL: https://jobacer.sorinnoroc.com
+BROWSER: chrome
+# Adding / at the beginning is required for endpoints
+ENDPOINTS:
+  home: /
+  login: /login
+  register: /register
