@@ -18,11 +18,11 @@ ${BANK_CHOICE_BUTTON}          xpath=//div[@data-onboarding='home-calculator']//
 
 ### CURRENCY
 The User Pressed the Currency Dropdown Arrow
-    [Arguments]    ${timeout}=1s
+    [Arguments]    ${timeout}=200ms
     Wait Until Keyword Succeeds    5x    ${timeout}    Click With Scroll And Wait    ${DROPDOWN_BUTTON}
     Element Should Be Visible            ${BANK_DROPDOWN_BUTTON}
     ${currencies_count}=    Get Element Count    ${ALL_VISIBLE_INPUT_FIELDS}
-    ${expected_count}=      Get Length    ${EXTENDED_CURRENCIES}
+    ${expected_count}=      Get Length           ${EXTENDED_CURRENCIES}
     Should Be Equal         ${currencies_count}    ${expected_count}
     ...    msg=Expected to see ${expected_count} currencies, but saw ${currencies_count}.
 

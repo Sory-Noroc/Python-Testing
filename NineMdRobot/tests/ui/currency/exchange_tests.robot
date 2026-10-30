@@ -1,7 +1,9 @@
 *** Settings ***
 Resource           ../../../resources/features/currency_exchange.resource
+Test Tags          regression
 Test Setup         Start Browser And Access Url
 Test Teardown      Close Browser
+
 
 *** Test Cases ***
 Entering A Decimal Amount In Any Currency Field Updates All Other Currencies
@@ -39,15 +41,16 @@ Entering A Decimal Amount In The Extended Currencies Menu Updates All Other Curr
     END
 
 Banks are Shown Correctly
-    [Tags]    TC_Values_001
+    [Tags]    TC_Values_001    positive
     [Documentation]    The User can choose a specific bank for precise exchange rates,
     ...                these banks have to be shown by default with minimal latency.
+
     Given The User Pressed The Currency Dropdown Arrow
     And The User Pressed The Bank Dropdown Arrow
     Then The Expected Banks are Visible
 
 Changing the Bank Updates the Currencies
-    [Tags]    TC_Bank_001    positive
+    [Tags]    TC_Bank_001    positive    smoke
     [Documentation]    When choosing a specific bank for the exchange, 
     ...                the rates might change compared to BNM.
     ...                The bank used for testing is 'Energbank'.
