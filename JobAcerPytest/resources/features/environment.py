@@ -5,6 +5,8 @@ import subprocess
 
 import allure
 from selenium import webdriver
+
+from libraries.DriverFactory import DriverFactory
 from libraries.PageFactory import PageFactory
 
 logging.basicConfig(filename="./results/debug.log", filemode="a", level=logging.DEBUG)
@@ -12,12 +14,13 @@ logger = logging.getLogger(__name__)
 
 def before_all(context):
     os.environ["BASE_URL"] = context.config.userdata.get("BASE_URL")
+    context.browser = context.config.userdata.get("BROWSER")
     # Clean previous test results
     shutil.rmtree("results/allure-results")
     os.mkdir("results/allure-results")
 
 def before_scenario(context, scenario):
-    context.driver = webdriver.Firefox()
+    context.driver = DriverFactory.get_driver(context.browser)
     context.driver.maximize_window()
     PageFactory.driver = context.driver
 
