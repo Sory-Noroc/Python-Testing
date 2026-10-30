@@ -18,6 +18,6 @@ class HomePage(BasePage):
         self.wait_for_visible(self.GET_STARTED_BUTTON, 1)
         return True
 
-    def get_error(self) -> str:
+    def check_error(self, error):
         raise NotImplementedError("Function not implemented yet.")
 

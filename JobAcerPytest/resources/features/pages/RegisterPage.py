@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+
+from libraries import StringUtils
 from resources.common.BasePage import BasePage
 
 
@@ -11,7 +13,7 @@ class RegisterPage(BasePage):
     PASSWORD_INPUT =            (By.CSS_SELECTOR, '#root main > div > div > form > div:nth-child(4) > div:nth-child(1) > input')
     CONFIRM_PASSWORD_INPUT =    (By.CSS_SELECTOR, '#root main > div > div > form > div:nth-child(4) > div:nth-child(2) > input')
     SUBMIT_BUTTON =             (By.CSS_SELECTOR, '#root main > div > div > form > button')
-    ERROR_MESSAGE =             (By.XPATH,        '//*[@id="root"]//main/div/div/div[2]')
+    ERROR_MESSAGE_TEMPLATE =    '//*[@id="root"]/div/main//div[contains(text(), "{}")]'
 
     def is_fully_rendered(self) -> bool:
         self.wait_for_visible(self.FIRST_NAME_INPUT, 3)
@@ -34,8 +36,9 @@ class RegisterPage(BasePage):
     def click_submit(self):
         self.click(self.SUBMIT_BUTTON)
 
-    def get_error(self) -> str:
-        return self.get_text(self.ERROR_MESSAGE)
+    def check_error(self, error):
+        error_locator = StringUtils.combine_locator_template(By.XPATH, self.ERROR_MESSAGE_TEMPLATE, error)
+        self.wait_for_visible(error_locator, 4)
 
     def is_loaded(self) -> bool:
         return self.is_visible(self.USERNAME_INPUT)

@@ -3,6 +3,8 @@ import os
 from abc import abstractmethod, ABC
 
 from selenium.common import TimeoutException
+from selenium.webdriver import ActionChains
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -41,19 +43,25 @@ class BasePage(ABC):
         pass
 
     @abstractmethod
-    def get_error(self) -> str:
-        """Returns the text from the error container/alert on the page."""
+    def check_error(self, error):
+        """Checks if the error is shown on the page."""
         pass
 
-    def find(self, locator, timeout=1.0):
-        """Return the element for a locator."""
+    def find(self, locator, timeout=1.0) -> WebElement:
+        """Searches for presence of the element, scrolls to the element, checks if its visible,
+        then returns the element.
+        :raises: TimeoutException If the element is not located/visible before the specified timeout. """
+
         logger.debug(f"Function find called on element '{locator[1]}'")
-        return WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
+        element = WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
+        ActionChains(self.driver).scroll_to_element(element).perform()
+        return element
 
     def click(self, locator, timeout=1.0):
         """Check if element is clickable, then click it."""
         logger.debug(f"Function click called on element '{locator[1]}'")
-        WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable(locator)).click()
+        element = self.find(locator, timeout)
+        WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable(element)).click()
 
     def type_text(self, locator, text, timeout=1.0):
         """Clear an element and type text into it."""
@@ -65,6 +73,7 @@ class BasePage(ABC):
     def wait_for_visible(self, locator, timeout=1.0):
         """Block until the element is visible."""
         logger.debug(f"Function wait_for_visible called on element '{locator[1]}'")
+        self.find(locator, timeout)
         WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
 
     def wait_for_invisible(self, locator, timeout=1.0):

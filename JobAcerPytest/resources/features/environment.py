@@ -2,27 +2,29 @@ import os
 import logging
 import shutil
 import subprocess
-
 import allure
-from selenium import webdriver
 
 from libraries.DriverFactory import DriverFactory
 from libraries.PageFactory import PageFactory
 
-logging.basicConfig(filename="./results/debug.log", filemode="a", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 def before_all(context):
+    logging.basicConfig(filename="./results/debug.log", filemode="a", level=logging.DEBUG)
     os.environ["BASE_URL"] = context.config.userdata.get("BASE_URL")
     context.browser = context.config.userdata.get("BROWSER")
+
     # Clean previous test results
     shutil.rmtree("results/allure-results")
     os.mkdir("results/allure-results")
+
 
 def before_scenario(context, scenario):
     context.driver = DriverFactory.get_driver(context.browser)
     context.driver.maximize_window()
     PageFactory.driver = context.driver
+
 
 def after_step(context, step):
     if step.status == "failed" and hasattr(context, "driver"):
@@ -31,6 +33,7 @@ def after_step(context, step):
             name=f"Screenshot_Failed_For_{step.name}",
             attachment_type=allure.attachment_type.PNG,
         )
+
 
 def after_scenario(context, scenario):
     context.driver.quit()
@@ -50,3 +53,4 @@ def after_all(context):
             logger.info(f"[ALLURE] Report generated successfully at: {os.path.abspath(report_dir)}")
         except subprocess.CalledProcessError as e:
             logger.error(f"[ALLURE] Failed to generate report. Ensure Allure CLI is installed and in PATH. Error: {e}")
+    logging.shutdown()
