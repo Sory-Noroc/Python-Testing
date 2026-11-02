@@ -39,8 +39,8 @@ def after_scenario(context, scenario):
     context.driver.quit()
 
 def after_all(context):
-    results_dir = "reports/allure-results"
-    report_dir = "reports/allure-report"
+    results_dir = "results/allure-results"
+    report_dir = "results/allure-report"
 
     if os.path.exists(results_dir):
         try:

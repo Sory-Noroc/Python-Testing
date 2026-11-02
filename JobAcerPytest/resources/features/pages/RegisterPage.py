@@ -16,14 +16,14 @@ class RegisterPage(BasePage):
     ERROR_MESSAGE_TEMPLATE =    '//*[@id="root"]/div/main//div[contains(text(), "{}")]'
 
     def is_fully_rendered(self) -> bool:
-        self.wait_for_visible(self.FIRST_NAME_INPUT, 3)
-        self.wait_for_visible(self.LAST_NAME_INPUT, 1)
-        self.wait_for_visible(self.EMAIL_INPUT, 1)
-        self.wait_for_visible(self.USERNAME_INPUT, 1)
-        self.wait_for_visible(self.PASSWORD_INPUT, 1)
-        self.wait_for_visible(self.CONFIRM_PASSWORD_INPUT, 1)
-        self.wait_for_visible(self.SUBMIT_BUTTON, 1)
-        return True
+        return self.is_visible(self.FIRST_NAME_INPUT, 3) \
+        and    self.is_visible(self.LAST_NAME_INPUT, 1) \
+        and    self.is_visible(self.LAST_NAME_INPUT, 1) \
+        and    self.is_visible(self.EMAIL_INPUT, 1) \
+        and    self.is_visible(self.USERNAME_INPUT, 1) \
+        and    self.is_visible(self.PASSWORD_INPUT, 1) \
+        and    self.is_visible(self.CONFIRM_PASSWORD_INPUT, 1) \
+        and    self.is_visible(self.SUBMIT_BUTTON, 1)
 
     def populate_registration(self, first_name, last_name, email, username, password, confirm_password):
         self.type_text(self.FIRST_NAME_INPUT, first_name)
