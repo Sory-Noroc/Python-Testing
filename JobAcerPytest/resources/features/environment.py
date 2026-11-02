@@ -3,6 +3,7 @@ import logging
 import shutil
 import subprocess
 import allure
+from behave import fixture, use_fixture
 from dotenv import load_dotenv
 
 from libraries.DriverFactory import DriverFactory
@@ -11,21 +12,27 @@ from libraries.PageFactory import PageFactory
 logger = logging.getLogger(__name__)
 
 
+@fixture
+def create_browser(context):
+    context.browser = context.config.userdata.get("BROWSER")
+    context.driver = DriverFactory.get_driver(context.browser)
+    context.driver.maximize_window()
+    PageFactory.driver = context.driver
+    yield context.driver
+    # CLEANUP
+    context.driver.quit()
+
+
 def before_all(context):
     logging.basicConfig(filename="./results/debug.log", filemode="a", level=logging.DEBUG)
     load_dotenv()
     os.environ["BASE_URL"] = context.config.userdata.get("BASE_URL")
-    context.browser = context.config.userdata.get("BROWSER")
 
     # Clean previous test results
     shutil.rmtree("results/allure-results")
     os.mkdir("results/allure-results")
 
-
-def before_scenario(context, scenario):
-    context.driver = DriverFactory.get_driver(context.browser)
-    context.driver.maximize_window()
-    PageFactory.driver = context.driver
+    use_fixture(create_browser, context)
 
 
 def after_step(context, step):
@@ -36,9 +43,6 @@ def after_step(context, step):
             attachment_type=allure.attachment_type.PNG,
         )
 
-
-def after_scenario(context, scenario):
-    context.driver.quit()
 
 def after_all(context):
     results_dir = "results/allure-results"
