@@ -36,9 +36,9 @@ class RegisterPage(BasePage):
     def click_submit(self):
         self.click(self.SUBMIT_BUTTON)
 
-    def check_error(self, error):
+    def error_is_visible(self, error):
         error_locator = StringUtils.combine_locator_template(By.XPATH, self.ERROR_MESSAGE_TEMPLATE, error)
-        self.wait_for_visible(error_locator, 4)
+        return self.is_visible(error_locator, 4)
 
     def is_loaded(self) -> bool:
         return self.is_visible(self.USERNAME_INPUT)

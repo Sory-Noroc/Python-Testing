@@ -43,7 +43,7 @@ class BasePage(ABC):
         pass
 
     @abstractmethod
-    def check_error(self, error):
+    def error_is_visible(self, error):
         """Checks if the error is shown on the page."""
         pass
 

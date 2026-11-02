@@ -3,6 +3,7 @@ import logging
 import shutil
 import subprocess
 import allure
+from dotenv import load_dotenv
 
 from libraries.DriverFactory import DriverFactory
 from libraries.PageFactory import PageFactory
@@ -12,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 def before_all(context):
     logging.basicConfig(filename="./results/debug.log", filemode="a", level=logging.DEBUG)
+    load_dotenv()
     os.environ["BASE_URL"] = context.config.userdata.get("BASE_URL")
     context.browser = context.config.userdata.get("BROWSER")
 
