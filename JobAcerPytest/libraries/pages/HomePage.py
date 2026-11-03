@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from resources.common.BasePage import BasePage
+from libraries.pages.BasePage import BasePage
 
 
 class HomePage(BasePage):

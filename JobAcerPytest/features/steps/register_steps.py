@@ -1,6 +1,6 @@
-from behave import given, when, then
+from behave import when
 
-from resources.features.pages.RegisterPage import RegisterPage
+from libraries.pages.RegisterPage import RegisterPage
 
 
 @when('user registers with "{first_name}", "{last_name}", "{email}", "{username}", "{password}" and "{pass_confirmation}"')

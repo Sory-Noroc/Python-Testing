@@ -6,8 +6,8 @@ import allure
 from behave import fixture, use_fixture
 from dotenv import load_dotenv
 
-from libraries.DriverFactory import DriverFactory
-from libraries.PageFactory import PageFactory
+from libraries.utils.DriverFactory import DriverFactory
+from libraries.utils.PageFactory import PageFactory
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
-from libraries import StringUtils
-from resources.common.BasePage import BasePage
+from libraries.utils import StringUtils
+from libraries.pages.BasePage import BasePage
 
 
 class RegisterPage(BasePage):

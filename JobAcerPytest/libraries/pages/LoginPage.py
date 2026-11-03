@@ -1,4 +1,4 @@
-from resources.common.BasePage import BasePage
+from libraries.pages.BasePage import BasePage
 
 
 class LoginPage(BasePage):

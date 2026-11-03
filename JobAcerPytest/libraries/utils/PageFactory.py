@@ -1,7 +1,7 @@
-from resources.common.BasePage import BasePage
-from resources.features.pages.HomePage import HomePage
-from resources.features.pages.LoginPage import LoginPage
-from resources.features.pages.RegisterPage import RegisterPage
+from libraries.pages.BasePage import BasePage
+from libraries.pages.HomePage import HomePage
+from libraries.pages.LoginPage import LoginPage
+from libraries.pages.RegisterPage import RegisterPage
 
 
 class PageFactory:

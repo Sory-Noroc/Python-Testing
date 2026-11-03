@@ -1,5 +1,5 @@
-from behave import given, when, then
-from libraries.PageFactory import PageFactory
+from behave import given, then
+from libraries.utils.PageFactory import PageFactory
 
 
 @given('user is on the "{page_name}" page')
