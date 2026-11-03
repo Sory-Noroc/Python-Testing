@@ -1,5 +1,4 @@
-from behave import when
-
+from behave import when, then
 from libraries.pages.RegisterPage import RegisterPage
 
 
@@ -19,3 +18,13 @@ def register_user(context, first_name, last_name, email, username, password, pas
 def create_account(context):
     page: RegisterPage = context.current_page
     page.click_submit()
+
+@then('user is on the code verification page')
+def verify_page_visible(context):
+    page: RegisterPage = context.current_page
+    assert page.on_code_verification_page("Verify Your Account")
+
+@then('user is not on the code verification page')
+def verify_page_not_visible(context):
+    page: RegisterPage = context.current_page
+    assert not page.on_code_verification_page("Verify Your Account")

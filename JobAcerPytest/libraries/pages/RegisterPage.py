@@ -13,6 +13,8 @@ class RegisterPage(BasePage):
     PASSWORD_INPUT =            (By.CSS_SELECTOR, '#root main > div > div > form > div:nth-child(4) > div:nth-child(1) > input')
     CONFIRM_PASSWORD_INPUT =    (By.CSS_SELECTOR, '#root main > div > div > form > div:nth-child(4) > div:nth-child(2) > input')
     SUBMIT_BUTTON =             (By.CSS_SELECTOR, '#root main > div > div > form > button')
+    PAGE_TITLE =                (By.CSS_SELECTOR, '#root main > div > div > div:nth-child(1) > h1')
+    VERIFICATION_BUTTON =       (By.CSS_SELECTOR, '#root > div > main > div > div > div:nth-child(3) > button')
     ERROR_MESSAGE_TEMPLATE =    '//*[@id="root"]/div/main//div[contains(text(), "{}")]'
 
     def is_fully_rendered(self) -> bool:
@@ -39,6 +41,10 @@ class RegisterPage(BasePage):
     def error_is_visible(self, error):
         error_locator = StringUtils.combine_locator_template(By.XPATH, self.ERROR_MESSAGE_TEMPLATE, error)
         return self.is_visible(error_locator, 4)
+
+    def on_code_verification_page(self, title):
+        return self.is_visible(self.VERIFICATION_BUTTON, 3) and \
+            self.has_text(self.PAGE_TITLE, title)
 
     def is_loaded(self) -> bool:
         return self.is_visible(self.USERNAME_INPUT)

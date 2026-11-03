@@ -76,30 +76,36 @@ class BasePage(ABC):
         self.find(locator, timeout)
         WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
 
-    def wait_for_invisible(self, locator, timeout=1.0):
-        """Block until the element is invisible."""
-        logger.debug(f"Function wait_for_invisible called on element '{locator[1]}'")
-        WebDriverWait(self.driver, timeout).until(EC.invisibility_of_element_located(locator))
+    def wait_for_text_in_element(self, locator, text, timeout=2.0):
+        """Block until the element has the expected text."""
+        logger.debug(f"Function wait_for_text_in_element called on element '{locator[1]}'")
+        WebDriverWait(self.driver, timeout).until(EC.text_to_be_present_in_element(locator, text))
+
+    def wait_for_page_loading(self, common_element_locator, timeout=3.0):
+        """Block until element is stale, which means the old page got changed and the new page is loaded. """
+        logger.debug(f"Function wait_for_page_loading called on element '{common_element_locator[1]}'")
+        element = self.find(common_element_locator, timeout)
+        WebDriverWait(self.driver, timeout).until(EC.staleness_of(element))
 
     def get_text(self, locator, timeout=1.0):
         """Return the text content of an element."""
         logger.debug(f"Function get_text called on element '{locator[1]}'")
         return self.find(locator, timeout).text
 
+    def has_text(self, locator, text: str, timeout=1.0):
+        """Return True if the element has the expected text inside, else False."""
+        logger.debug(f"Function has_text called on element '{locator[1]}'")
+        try:
+            self.wait_for_text_in_element(locator, text, timeout)
+            return True
+        except TimeoutException:
+            return False
+
     def is_visible(self, locator, timeout=2.0) -> bool:
         """Return True if the element is visible, False otherwise."""
         logger.debug(f"Function is_visible called on element '{locator[1]}'")
         try:
             self.wait_for_visible(locator, timeout)
-            return True
-        except TimeoutException:
-            return False
-
-    def is_invisible(self, locator, timeout=2.0) -> bool:
-        """Return True if the element is invisible, False otherwise."""
-        logger.debug(f"Function is_invisible called on element '{locator[1]}'")
-        try:
-            self.wait_for_invisible(locator, timeout)
             return True
         except TimeoutException:
             return False
