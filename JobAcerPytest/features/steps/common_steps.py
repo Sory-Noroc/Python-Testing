@@ -1,4 +1,6 @@
 from behave import given, then
+
+from libraries.api.user_service import UserService
 from libraries.utils.PageFactory import PageFactory
 
 
@@ -11,7 +13,11 @@ def i_am_on_register_page(context, page_name):
 
 @given('user "{username}" is already registered')
 def add_user_to_database(context, username):
-    pass
+    user_service: UserService = context.user_service
+    user = user_service.get_user_by_username(username)
+    response = user_service.register_user(user)
+    # 201 - Created, 400 - User already exists
+    assert response.status_code in [201, 400], f"Status code is actually {response.status_code}"
 
 @given('user "{username}" is NOT present in the database')
 def remove_user_from_database(context, username):

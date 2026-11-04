@@ -6,6 +6,7 @@ import allure
 from behave import fixture, use_fixture
 from dotenv import load_dotenv
 
+from libraries.api.user_service import UserService
 from libraries.db.database_helper import DatabaseHelper
 from libraries.utils.DriverFactory import DriverFactory
 from libraries.utils.PageFactory import PageFactory
@@ -27,8 +28,16 @@ def create_browser(context):
 def before_all(context):
     logging.basicConfig(filename="./results/debug.log", filemode="a", level=logging.INFO)
     load_dotenv()
-    os.environ["BASE_URL"] = context.config.userdata.get("BASE_URL")
+
+    base_url = context.config.userdata.get("BASE_URL")
+    uac_url = context.config.userdata.get("UAC_URL")
+    interview_url = context.config.userdata.get("INTERVIEW_URL")
+    os.environ["BASE_URL"] = base_url
+    os.environ["UAC_URL"] = uac_url
+    os.environ["INTERVIEW_URL"] = interview_url
+
     context.database = DatabaseHelper()
+    context.user_service = UserService(uac_url)
 
     # Clean previous test results
     shutil.rmtree("results/allure-results")
