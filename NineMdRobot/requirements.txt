@@ -1,0 +1,2 @@
+robotframework==7.5
+pyyaml==6.0.3

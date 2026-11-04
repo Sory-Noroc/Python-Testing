@@ -1,1 +1,0 @@
-robot --pythonpath . --outputdir results tests

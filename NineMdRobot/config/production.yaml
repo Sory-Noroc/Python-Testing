@@ -1,0 +1,24 @@
+BASE_URL: https://999.md
+BROWSER: chrome
+# Adding / at the beginning is required for endpoints
+ENDPOINTS:
+  home: /ru
+  transport: /ro/transport
+# Order doesn't matter for currencies
+DEFAULT_CURRENCIES:
+  - mdl
+  - usd
+  - eur
+EXTENDED_CURRENCIES:
+  - mdl
+  - usd
+  - eur
+  - ron
+  - uah
+  - gbp
+BANKS:
+  - Banca Nationala a Moldovei
+  - Energbank
+  - Eurocreditbank
+  - Fincombank
+  - Mobiasbanca
