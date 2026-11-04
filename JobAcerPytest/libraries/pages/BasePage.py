@@ -2,7 +2,7 @@ import logging
 import os
 from abc import abstractmethod, ABC
 
-from selenium.common import TimeoutException
+from selenium.common import TimeoutException, StaleElementReferenceException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -98,7 +98,7 @@ class BasePage(ABC):
         try:
             self.wait_for_text_in_element(locator, text, timeout)
             return True
-        except TimeoutException:
+        except (TimeoutException, StaleElementReferenceException):
             return False
 
     def is_visible(self, locator, timeout=2.0) -> bool:
@@ -107,5 +107,5 @@ class BasePage(ABC):
         try:
             self.wait_for_visible(locator, timeout)
             return True
-        except TimeoutException:
+        except (TimeoutException, StaleElementReferenceException):
             return False
