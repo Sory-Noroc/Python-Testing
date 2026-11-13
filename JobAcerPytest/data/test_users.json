@@ -6,7 +6,13 @@
     "username": "Sory02",
     "password": "sorin.noroc"
   },
-
+  {
+    "firstName": "Tom",
+    "lastName": "Sawyer",
+    "email": "sorin.noroc@student.tuiasi.ro",
+    "username": "Student",
+    "password": "sorin.noroc"
+  },
   {
     "firstName": "test",
     "lastName": "test",

@@ -37,13 +37,17 @@ def before_all(context):
     os.environ["INTERVIEW_URL"] = interview_url
 
     context.database = DatabaseHelper()
-    context.user_service = UserService(uac_url)
 
     # Clean previous test results
     shutil.rmtree("results/allure-results")
     os.mkdir("results/allure-results")
 
     use_fixture(create_browser, context)
+
+
+def before_scenario(context, scenario):
+    uac_url = os.getenv("UAC_URL")
+    context.user_service = UserService(uac_url)
 
 
 def after_step(context, step):

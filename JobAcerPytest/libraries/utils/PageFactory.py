@@ -14,7 +14,7 @@ class PageFactory:
     _registry = {
         "home": (HomePage, "/"),
         "register": (RegisterPage, "/register"),
-        "register_success": (LoginPage, "/login")
+        "login": (LoginPage, "/login")
     }
 
     @classmethod
